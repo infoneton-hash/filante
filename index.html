@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Filante</title>
+<meta name="description" content="Filante : glisse la comète, attrape toutes les étoiles. Trois ciels par jour, les mêmes pour le monde entier. Gratuit, sans publicité, sans compte.">
+<meta name="theme-color" content="#0b1026">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Filante"><meta property="og:type" content="website"><meta property="og:url" content="https://infoneton-hash.github.io/filante/"><meta property="og:image" content="https://infoneton-hash.github.io/filante/partage.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header class="haut">
+    <h1 class="titre"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><path d="M4 28 20 12" stroke="var(--trainee)" stroke-width="5" stroke-linecap="round"/><circle cx="22" cy="10" r="6" fill="var(--comete)"/></svg><span>Filante</span></h1>
+    <div class="outils">
+      <button id="b-son" class="rond" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path class="ondes" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="barre" d="M16 9l6 6M22 9l-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button id="b-stats" class="rond" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button>
+      <button id="b-aide" class="rond" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9a3 3 0 1 1 4.5 2.6c-.9.6-1.5 1.2-1.5 2.4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="18" r="1.6" fill="currentColor"/></svg></button>
+      <select id="langue" class="langue"></select>
+    </div>
+  </header>
+
+  <main>
+    <div class="bandeau">
+      <div class="mode"><span id="t-mode"></span></div>
+      <ol class="etapes" id="etapes" aria-hidden="true"><li></li><li></li><li></li></ol>
+      <div class="compteur"><span id="t-coups"></span></div>
+    </div>
+
+    <div class="plateau-cadre">
+      <svg id="plateau" class="plateau" role="img" tabindex="0" focusable="true"></svg>
+      <div id="fin-ciel" class="fin-ciel" hidden>
+        <p id="t-fin-ciel" class="fin-ligne"></p>
+        <button id="b-suivant" class="plein" type="button"></button>
+      </div>
+    </div>
+    <p id="astuce" class="astuce"></p>
+
+    <div class="commandes">
+      <div class="croix" role="group" id="croix">
+        <button type="button" data-dir="U" class="fleche haut-f"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5l7 9H5z" fill="currentColor"/></svg></button>
+        <button type="button" data-dir="L" class="fleche gauche-f"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l9-7v14z" fill="currentColor"/></svg></button>
+        <button type="button" data-dir="R" class="fleche droite-f"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12l-9 7V5z" fill="currentColor"/></svg></button>
+        <button type="button" data-dir="D" class="fleche bas-f"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l-7-9h14z" fill="currentColor"/></svg></button>
+      </div>
+      <div class="libre" id="libre" hidden>
+        <button id="b-annuler" class="creux" type="button"></button>
+        <button id="b-nouveau" class="creux" type="button"></button>
+        <button id="b-retour" class="creux" type="button"></button>
+      </div>
+    </div>
+    <p id="annonce" class="invisible" aria-live="polite"></p>
+  </main>
+</div>
+
+<dialog id="d-resultat" class="boite">
+  <h2 id="t-res-titre"></h2>
+  <p class="carres" id="res-carres" aria-hidden="true"></p>
+  <p class="grand" id="res-score"></p>
+  <p id="res-detail" class="doux"></p>
+  <dl class="chiffres">
+    <div><dt id="l-serie"></dt><dd id="v-serie"></dd></div>
+    <div><dt id="l-record"></dt><dd id="v-record"></dd></div>
+    <div><dt id="l-joues"></dt><dd id="v-joues"></dd></div>
+    <div><dt id="l-parfaits"></dt><dd id="v-parfaits"></dd></div>
+  </dl>
+  <p class="doux" id="res-prochain"></p>
+  <div class="boutons">
+    <button id="b-partager" class="plein" type="button"></button>
+    <button id="b-entrainer" class="creux" type="button"></button>
+    <button id="b-fermer-res" class="creux" type="button"></button>
+  </div>
+  <textarea id="zone-partage" class="zone-partage" readonly hidden rows="3"></textarea>
+  <p id="t-copie" class="doux" role="status"></p>
+</dialog>
+
+<dialog id="d-aide" class="boite">
+  <h2 id="t-aide-titre"></h2>
+  <ol class="regles">
+    <li id="t-regle1"></li>
+    <li id="t-regle2"></li>
+    <li id="t-regle3"></li>
+  </ol>
+  <p class="legende"><span class="pastille n0"></span> <span id="t-leg0"></span><br><span class="pastille n1"></span> <span id="t-leg1"></span><br><span class="pastille n2"></span> <span id="t-leg2"></span></p>
+  <p class="doux" id="t-prive"></p>
+  <p class="doux"><a id="t-legal" class="lien" href="mentions.html"></a></p>
+  <div class="boutons"><button id="b-fermer-aide" class="plein" type="button"></button></div>
+</dialog>
+
+<script src="logique.js"></script>
+<script src="textes.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
